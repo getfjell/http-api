@@ -47,7 +47,7 @@
     "vitest": "^3.2.4",
     "vitest-fetch-mock": "^0.4.5"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.12.4",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/getfjell/http-api.git"
