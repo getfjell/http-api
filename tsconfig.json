@@ -20,7 +20,10 @@
     "target": "es2022",
     "module": "es2022",
     "moduleResolution": "bundler",
-    "useUnknownInCatchVariables": false
+    "useUnknownInCatchVariables": false,
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "./src/**/*.ts",
