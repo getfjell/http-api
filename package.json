@@ -30,7 +30,7 @@
     "docs:test": "cd docs && npm run test"
   },
   "dependencies": {
-    "@fjell/logging": "^4.4.25"
+    "@fjell/logging": "^4.4.26"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
