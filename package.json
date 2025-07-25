@@ -18,8 +18,8 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"tsc --noEmit --watch\" \"node build.mjs\"",
-    "build": "pnpm run lint && tsc --noEmit && node build.mjs",
+    "dev": "concurrently \"tsc --noEmit --watch\" \"node build.js\"",
+    "build": "pnpm run lint && tsc --noEmit && node build.js",
     "lint": "eslint . --ext .ts --fix",
     "clean": "rimraf dist",
     "test": "pnpm run lint && vitest run --coverage",
