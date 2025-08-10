@@ -3,6 +3,15 @@
  */
 
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+
+vi.mock('@fjell/http-api', () => ({
+  get: vi.fn(),
+  post: vi.fn(),
+  put: vi.fn(),
+}), { virtual: true });
+
+import { get, post, put } from '@fjell/http-api';
+
 import {
   apiKeyAuthenticationExample,
   bearerTokenAuthenticationExample,
@@ -16,79 +25,52 @@ describe('Authentication Example', () => {
   beforeEach(() => {
     vi.spyOn(console, 'log').mockImplementation(() => { });
     vi.spyOn(console, 'error').mockImplementation(() => { });
+    get.mockReset();
+    post.mockReset();
+    put.mockReset();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  test('apiKeyAuthenticationExample should execute without throwing', async () => {
-    try {
-      await apiKeyAuthenticationExample();
-      expect(true).toBe(true);
-    } catch (error) {
-      if (error.message?.includes('Cannot resolve module') ||
-        error.message?.includes('SyntaxError') ||
-        error.message?.includes('TypeError')) {
-        throw error;
-      }
-      expect(error).toBeInstanceOf(Error);
-    }
+  test('apiKeyAuthenticationExample makes authenticated requests', async () => {
+    get.mockResolvedValue({});
+    await apiKeyAuthenticationExample();
+    expect(get).toHaveBeenCalledTimes(2);
   });
 
-  test('bearerTokenAuthenticationExample should execute without throwing', async () => {
-    try {
-      await bearerTokenAuthenticationExample();
-      expect(true).toBe(true);
-    } catch (error) {
-      if (error.message?.includes('Cannot resolve module') ||
-        error.message?.includes('SyntaxError') ||
-        error.message?.includes('TypeError')) {
-        throw error;
-      }
-      expect(error).toBeInstanceOf(Error);
-    }
+  test('bearerTokenAuthenticationExample makes authenticated requests', async () => {
+    get.mockResolvedValueOnce({}).mockResolvedValueOnce({});
+    post.mockResolvedValueOnce({});
+    put.mockResolvedValueOnce({});
+    await bearerTokenAuthenticationExample();
+    expect(get).toHaveBeenCalled();
+    expect(post).toHaveBeenCalled();
+    expect(put).toHaveBeenCalled();
   });
 
-  test('customAuthenticationExample should execute without throwing', async () => {
-    try {
-      await customAuthenticationExample();
-      expect(true).toBe(true);
-    } catch (error) {
-      if (error.message?.includes('Cannot resolve module') ||
-        error.message?.includes('SyntaxError') ||
-        error.message?.includes('TypeError')) {
-        throw error;
-      }
-      expect(error).toBeInstanceOf(Error);
-    }
+  test('customAuthenticationExample supports multiple auth methods', async () => {
+    get.mockResolvedValue({});
+    post.mockResolvedValue({});
+    await customAuthenticationExample();
+    expect(get).toHaveBeenCalledTimes(2);
+    expect(post).toHaveBeenCalledTimes(1);
   });
 
-  test('sessionBasedAuthenticationExample should execute without throwing', async () => {
-    try {
-      await sessionBasedAuthenticationExample();
-      expect(true).toBe(true);
-    } catch (error) {
-      if (error.message?.includes('Cannot resolve module') ||
-        error.message?.includes('SyntaxError') ||
-        error.message?.includes('TypeError')) {
-        throw error;
-      }
-      expect(error).toBeInstanceOf(Error);
-    }
+  test('sessionBasedAuthenticationExample performs login and logout', async () => {
+    post.mockResolvedValueOnce({}).mockResolvedValueOnce({});
+    get.mockResolvedValueOnce({});
+    await sessionBasedAuthenticationExample();
+    expect(post).toHaveBeenCalledTimes(2);
+    expect(get).toHaveBeenCalledTimes(1);
   });
 
-  test('refreshTokenExample should execute without throwing', async () => {
-    try {
-      await refreshTokenExample();
-      expect(true).toBe(true);
-    } catch (error) {
-      if (error.message?.includes('Cannot resolve module') ||
-        error.message?.includes('SyntaxError') ||
-        error.message?.includes('TypeError')) {
-        throw error;
-      }
-      expect(error).toBeInstanceOf(Error);
-    }
+  test('refreshTokenExample refreshes and uses new token', async () => {
+    post.mockResolvedValueOnce({ access_token: 'new-token' });
+    get.mockResolvedValueOnce({});
+    await refreshTokenExample();
+    expect(post).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
   });
 });

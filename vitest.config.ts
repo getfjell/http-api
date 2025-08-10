@@ -1,6 +1,15 @@
 import { defineConfig } from 'vitest/config';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@fjell/http-api': resolve(__dirname, 'src'),
+    },
+  },
   test: {
     environment: 'jsdom',
     include: ['tests/**/*.test.ts'],
@@ -9,7 +18,7 @@ export default defineConfig({
       reporter: ['text', 'lcov', 'html'],
       reportsDirectory: 'coverage',
       all: true,
-      include: ['src/**/*.ts'],
+      include: ['src/**/*.ts', 'examples/**/*.ts'],
       thresholds: {
         global: {
           branches: 66,
