@@ -58,12 +58,28 @@ describe('Authentication Example', () => {
     expect(put).toHaveBeenCalled();
   });
 
+  test('bearerTokenAuthenticationExample handles errors', async () => {
+    get.mockRejectedValueOnce(new Error('token expired'));
+    post.mockRejectedValueOnce(new Error('forbidden'));
+    put.mockRejectedValueOnce(new Error('unauthorized'));
+    await bearerTokenAuthenticationExample();
+    expect(console.error).toHaveBeenCalled();
+  });
+
   test('customAuthenticationExample supports multiple auth methods', async () => {
     get.mockResolvedValue({});
     post.mockResolvedValue({});
     await customAuthenticationExample();
     expect(get).toHaveBeenCalledTimes(2);
     expect(post).toHaveBeenCalledTimes(1);
+  });
+
+  test('customAuthenticationExample handles errors', async () => {
+    get.mockRejectedValueOnce(new Error('jwt invalid'));
+    get.mockRejectedValueOnce(new Error('hmac mismatch'));
+    post.mockRejectedValueOnce(new Error('oauth error'));
+    await customAuthenticationExample();
+    expect(console.error).toHaveBeenCalled();
   });
 
   test('sessionBasedAuthenticationExample performs login and logout', async () => {
@@ -74,11 +90,26 @@ describe('Authentication Example', () => {
     expect(get).toHaveBeenCalledTimes(1);
   });
 
+  test('sessionBasedAuthenticationExample handles errors', async () => {
+    post.mockRejectedValueOnce(new Error('login failed'));
+    get.mockRejectedValueOnce(new Error('unauthorized'));
+    post.mockRejectedValueOnce(new Error('logout failed'));
+    await sessionBasedAuthenticationExample();
+    expect(console.error).toHaveBeenCalled();
+  });
+
   test('refreshTokenExample refreshes and uses new token', async () => {
     post.mockResolvedValueOnce({ access_token: 'new-token' });
     get.mockResolvedValueOnce({});
     await refreshTokenExample();
     expect(post).toHaveBeenCalledTimes(1);
     expect(get).toHaveBeenCalledTimes(1);
+  });
+
+  test('refreshTokenExample handles errors', async () => {
+    post.mockRejectedValueOnce(new Error('refresh failed'));
+    get.mockRejectedValueOnce(new Error('protected request failed'));
+    await refreshTokenExample();
+    expect(console.error).toHaveBeenCalled();
   });
 });

@@ -20,13 +20,12 @@ export default defineConfig({
       all: true,
       include: ['src/**/*.ts', 'examples/**/*.ts'],
       thresholds: {
-        global: {
-          branches: 66,
-          functions: 71,
-          lines: 75,
-          statements: 75,
-        },
+        branches: 80,
+        functions: 90,
+        lines: 91,
+        statements: 91,
       },
+      checkCoverage: true,
     },
     setupFiles: ['vitest.setup.ts'],
     globals: true,
