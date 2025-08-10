@@ -40,6 +40,14 @@ describe('File Upload Example', () => {
     expect(postFileMethod).toHaveBeenCalled();
   });
 
+  test('basicFileUploadExample handles upload errors', async () => {
+    postFileMethod.mockRejectedValueOnce(new Error('upload failed'));
+
+    await basicFileUploadExample();
+
+    expect(console.error).toHaveBeenCalled();
+  });
+
   test('asyncFileUploadExample handles async uploads', async () => {
     vi.useFakeTimers();
     uploadAsyncMethod.mockResolvedValue({ upload_id: '123', status: 'processing' });

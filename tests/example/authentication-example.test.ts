@@ -40,6 +40,14 @@ describe('Authentication Example', () => {
     expect(get).toHaveBeenCalledTimes(2);
   });
 
+  test('apiKeyAuthenticationExample handles errors', async () => {
+    get.mockRejectedValueOnce(new Error('unauthorized'));
+
+    await apiKeyAuthenticationExample();
+
+    expect(console.error).toHaveBeenCalled();
+  });
+
   test('bearerTokenAuthenticationExample makes authenticated requests', async () => {
     get.mockResolvedValueOnce({}).mockResolvedValueOnce({});
     post.mockResolvedValueOnce({});
