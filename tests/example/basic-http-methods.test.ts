@@ -51,4 +51,12 @@ describe('Basic HTTP Methods Example', () => {
     expect(get).toHaveBeenCalled();
     expect(post).toHaveBeenCalled();
   });
+
+  test('basicHttpExamples logs errors on failure', async () => {
+    get.mockRejectedValueOnce(new Error('Network error'));
+
+    await basicHttpExamples();
+
+    expect(console.error).toHaveBeenCalled();
+  });
 });

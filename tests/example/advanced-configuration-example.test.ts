@@ -39,6 +39,14 @@ describe('Advanced Configuration Example', () => {
     expect(get).toHaveBeenCalled();
   });
 
+  test('customHeadersExample handles request errors', async () => {
+    get.mockRejectedValueOnce(new Error('failure'));
+
+    await customHeadersExample();
+
+    expect(console.error).toHaveBeenCalled();
+  });
+
   test('contentTypeExample executes HTTP requests', async () => {
     post.mockResolvedValue({});
     await contentTypeExample();
