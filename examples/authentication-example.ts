@@ -142,7 +142,7 @@ async function customAuthenticationExample() {
     // OAuth 2.0 style authentication
     console.log('\n3. OAuth 2.0 Style Authentication...');
     const oauthToken = 'oauth2-access-token';
-    const oauthResponse = await post(`${PROTECTED_API}/oauth/resource`, {
+    await post(`${PROTECTED_API}/oauth/resource`, {
       action: 'read',
       resource_id: '12345'
     }, {
