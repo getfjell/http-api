@@ -153,7 +153,9 @@ async function customAuthenticationExample() {
       },
       isAuthenticated: true
     });
-    console.log('OAuth resource:', oauthResponse);
+    // Do not log the full OAuth resource response as it may contain sensitive data.
+    // If you need to log something, select only non-sensitive fields:
+    console.log('OAuth resource request successful.');
 
   } catch (error) {
     console.error('Custom authentication failed:', error.message);
